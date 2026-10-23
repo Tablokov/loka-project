@@ -1,0 +1,45 @@
+:root{
+  --loka:#FF5A0A; --loka-gelap:#C93F00; --loka-muda:#FFF1E8;
+  --teks:#2A1A12; --garis:#EADFD7; --latar:#FBF7F4;
+}
+body{background:var(--latar);color:var(--teks);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.btn-loka{background:var(--loka);border-color:var(--loka);color:#fff}
+.btn-loka:hover,.btn-loka:focus{background:var(--loka-gelap);border-color:var(--loka-gelap);color:#fff}
+.btn-outline-loka{border-color:var(--loka);color:var(--loka-gelap)}
+.btn-outline-loka:hover{background:var(--loka);color:#fff}
+a{color:var(--loka-gelap)}
+.form-control:focus,.form-select:focus{border-color:var(--loka);box-shadow:0 0 0 .2rem rgba(255,90,10,.2)}
+
+.sidebar{position:fixed;inset:0 auto 0 0;width:230px;background:var(--loka);color:#fff;display:flex;flex-direction:column;z-index:1030;transition:transform .2s}
+.sidebar .brand{display:block;padding:18px}
+.sidebar .brand img{width:100%;max-width:150px;border-radius:12px;display:block}
+.sidebar .nav-link{color:#fff;padding:.65rem 1.25rem;display:flex;gap:.7rem;align-items:center;border-left:4px solid transparent}
+.sidebar .nav-link:hover{background:rgba(255,255,255,.12)}
+.sidebar .nav-link.active{background:#fff;color:var(--loka-gelap);font-weight:600;border-left-color:var(--teks)}
+.sidebar .nav-link.disabled{opacity:.55;cursor:not-allowed}
+.sidebar .user-box{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.25)}
+
+.konten{margin-left:230px;min-height:100vh}
+.topbar{display:flex;align-items:center;gap:.5rem;padding:.9rem 1.5rem;background:#fff;border-bottom:1px solid var(--garis)}
+
+.kartu{background:#fff;border:1px solid var(--garis);border-radius:10px;padding:1.1rem 1.25rem}
+.stat .angka{font-size:2rem;font-weight:700;line-height:1.1}
+.stat.utama{background:var(--loka);border-color:var(--loka);color:#fff}
+.table thead th{background:var(--loka-muda);border-bottom:2px solid var(--loka);font-weight:600;white-space:nowrap}
+.badge-bronze{background:#B87333}.badge-silver{background:#8A9199}.badge-gold{background:#D9A400;color:#2A1A12}
+
+.login-wrap{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.login-brand{background:var(--loka);display:flex;align-items:center;justify-content:center;padding:2rem}
+.login-brand img{width:min(320px,70%);border-radius:18px}
+.login-form{display:flex;align-items:center;justify-content:center;padding:2rem}
+
+@media (max-width:991.98px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.terbuka{transform:none}
+  .konten{margin-left:0}
+}
+@media (max-width:767.98px){
+  .login-wrap{grid-template-columns:1fr}
+  .login-brand{padding:1.5rem}.login-brand img{width:120px}
+}
+@media (prefers-reduced-motion:reduce){.sidebar{transition:none}}
