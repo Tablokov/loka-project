@@ -1,0 +1,110 @@
+:root{
+  --bg:#120a06; --kartu:#1e130d; --kartu2:#27170f; --garis:rgba(255,122,41,.28); --garis-lembut:rgba(255,255,255,.08);
+  --teks:#f6ece4; --redup:#bfae9f; --loka:#FF6A1A; --loka-gelap:#D9480F; --emas:#FFC46B; --hijau:#7be0a4; --merah:#ff8f8f;
+  --r:20px;
+}
+html{scroll-padding-top:120px}
+body.member{background:radial-gradient(circle at 12% -8%,rgba(255,90,10,.30),transparent 45%),radial-gradient(circle at 100% 35%,rgba(255,90,10,.12),transparent 42%),var(--bg);
+  background-attachment:fixed;color:var(--teks);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+.member a{color:var(--emas)}
+.member .text-redup{color:var(--redup)!important}
+
+/* top bar */
+.mtop{position:sticky;top:0;z-index:1040;background:rgba(18,10,6,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--garis)}
+.mtop-in{max-width:1180px;margin:0 auto;padding:.7rem 1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.mbrand{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--teks)!important}
+.mbrand img{width:46px;height:46px;border-radius:12px;border:1px solid var(--garis)}
+.mbrand b{display:block;font-size:1.15rem;letter-spacing:.06em;line-height:1.1}
+.mbrand small{display:block;color:var(--emas);font-size:.68rem;letter-spacing:.04em;font-weight:600}
+.mnav{display:flex;gap:.3rem;margin:0 auto;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.mnav::-webkit-scrollbar{display:none}
+.mnav a{display:flex;align-items:center;gap:.45rem;white-space:nowrap;padding:.5rem .9rem;border-radius:12px;color:var(--teks);text-decoration:none;font-size:.88rem;font-weight:600;border:1px solid transparent}
+.mnav a:hover{background:rgba(255,255,255,.07)}
+.mnav a.aktif{background:linear-gradient(135deg,rgba(255,106,26,.45),rgba(217,72,15,.45));border-color:var(--loka);box-shadow:0 0 18px rgba(255,106,26,.25)}
+.mtools{display:flex;align-items:center;gap:.6rem}
+.poin-pill{display:flex;align-items:center;gap:.4rem;padding:.35rem .9rem;border:1px solid var(--emas);border-radius:999px;color:var(--emas);font-weight:700;background:rgba(255,196,107,.08);font-size:.9rem}
+.poin-pill small{opacity:.8;font-weight:500}
+.akun-btn{display:flex;align-items:center;gap:.5rem;background:var(--kartu2);border:1px solid var(--garis-lembut);color:var(--teks);border-radius:999px;padding:.25rem .7rem .25rem .3rem;font-weight:600;font-size:.9rem}
+.akun-btn:hover,.akun-btn:focus{background:#321e14;color:var(--teks)}
+.avatar{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#ffb066,var(--loka));color:#2a1204;font-weight:800}
+.avatar.besar{width:84px;height:84px;font-size:2.2rem;border:3px solid rgba(255,255,255,.2)}
+.dropdown-menu{background:var(--kartu2);border:1px solid var(--garis);--bs-dropdown-link-color:var(--teks);--bs-dropdown-link-hover-bg:rgba(255,106,26,.2);--bs-dropdown-link-hover-color:#fff}
+
+.mwrap{max-width:1180px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.mjudul{font-size:1.6rem;font-weight:800;margin:0}
+.msub{color:var(--redup);margin:.2rem 0 0}
+
+/* kartu & komponen */
+.mk{background:linear-gradient(180deg,var(--kartu),#180e09);border:1px solid var(--garis);border-radius:var(--r);padding:1.25rem 1.4rem}
+.mk.hijau{background:linear-gradient(180deg,#14261d,#101b15);border-color:rgba(123,224,164,.25)}
+.mk h2,.mk h3{font-weight:700}
+.mstat{background:rgba(255,255,255,.035);border:1px solid var(--garis-lembut);border-radius:16px;padding:1rem 1.1rem}
+.mstat .lbl{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--redup)}
+.mstat .val{font-size:1.9rem;font-weight:800;line-height:1.15}
+.mstat.emas .val{color:var(--emas)}
+.mbtn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border:0;border-radius:12px;padding:.6rem 1.1rem;font-weight:700;color:#fff!important;text-decoration:none;
+  background:linear-gradient(135deg,#FF6A1A,#D9480F);box-shadow:0 6px 18px rgba(217,72,15,.35)}
+.mbtn:hover{filter:brightness(1.1);color:#fff}
+.mbtn.gelap{background:rgba(255,255,255,.07);box-shadow:none;border:1px solid var(--garis-lembut)}
+.mbtn.wa{background:#1f7a47;box-shadow:none}
+.mbtn[disabled],.mbtn.mati{background:rgba(255,255,255,.07);box-shadow:none;color:var(--redup)!important;cursor:not-allowed}
+.mbadge{display:inline-block;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:8px;background:#3a2a20;color:var(--teks)}
+.mbadge.baru{background:#3b2a05;color:#ffd27a}.mbadge.proses{background:#3a2208;color:#ffb36b}.mbadge.selesai{background:#123524;color:var(--hijau)}
+.mbadge.bronze{background:#5a3718;color:#ffcf9e}.mbadge.silver{background:#3b4047;color:#e3e8ee}.mbadge.gold{background:#5c4600;color:#ffe08a}
+.mbadge.tinggi{background:#4a1616;color:var(--merah)}.mbadge.sedang{background:#3b2a05;color:#ffd27a}.mbadge.rendah{background:#27303a;color:#c9d6e2}
+.mprog{height:10px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.mprog>span{display:block;height:100%;background:linear-gradient(90deg,var(--emas),var(--loka));border-radius:99px}
+.mtab{display:flex;gap:.4rem;flex-wrap:wrap}
+.mtab button{border:1px solid var(--garis-lembut);background:var(--kartu2);color:var(--teks);border-radius:12px;padding:.45rem 1rem;font-weight:700;font-size:.9rem}
+.mtab button.aktif{background:linear-gradient(135deg,#FF6A1A,#D9480F);border-color:var(--loka)}
+.mkosong{text-align:center;padding:2.2rem 1rem;color:var(--redup)}
+.mkosong i{font-size:2.4rem;color:var(--emas);display:block;margin-bottom:.5rem}
+
+/* form gelap */
+.member .form-control,.member .form-select{background:#2a150d;border:1px solid var(--garis);color:var(--teks);border-radius:12px;padding:.65rem .9rem}
+.member .form-control::placeholder{color:#8f7d70}
+.member .form-control:focus,.member .form-select:focus{background:#2f180f;border-color:var(--loka);box-shadow:0 0 0 .2rem rgba(255,106,26,.25);color:var(--teks)}
+.member .form-label{font-weight:700;font-size:.85rem}
+.member .modal-content{background:#14261d;border:1px solid rgba(123,224,164,.25);border-radius:22px}
+.member .modal-header,.member .modal-footer{border-color:var(--garis-lembut)}
+.member .form-text{color:var(--redup)}
+.member .alert{border-radius:14px}
+.member .accordion{--bs-accordion-bg:transparent;--bs-accordion-color:var(--teks);--bs-accordion-border-color:var(--garis-lembut);--bs-accordion-btn-bg:transparent;--bs-accordion-active-bg:transparent;--bs-accordion-active-color:var(--emas);--bs-accordion-btn-color:var(--teks);--bs-accordion-btn-focus-box-shadow:0 0 0 .2rem rgba(255,106,26,.25)}
+.member .accordion-button{font-size:.9rem;font-weight:600}
+.member .accordion-button::after{filter:invert(1)}
+
+/* kartu digital */
+.kartu-digital{position:relative;overflow:hidden;border-radius:24px;padding:1.6rem;min-height:210px;color:#fff;
+  background:radial-gradient(circle at 85% 10%,rgba(255,255,255,.28),transparent 40%),linear-gradient(135deg,#FF7A2E,#C23A05 70%);box-shadow:0 18px 40px rgba(217,72,15,.35)}
+.kartu-digital .pola{position:absolute;right:-40px;bottom:-60px;width:240px;height:240px;border-radius:50%;border:30px solid rgba(255,255,255,.12)}
+.kartu-digital .kode{font-family:ui-monospace,Consolas,monospace;letter-spacing:.12em;font-size:1.05rem}
+.qr-box{background:#fff;border-radius:14px;padding:8px;display:inline-block;line-height:0}
+
+/* stempel */
+.stempel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+.stempel{aspect-ratio:1;border:2px dashed rgba(255,196,107,.3);border-radius:16px;display:grid;place-content:center;text-align:center;font-size:.72rem;font-weight:700;color:var(--redup);padding:.3rem}
+.stempel i{font-size:1.6rem;display:block;margin-bottom:.15rem}
+.stempel.isi{border:2px solid var(--emas);background:linear-gradient(135deg,rgba(255,106,26,.45),rgba(255,196,107,.18));color:var(--emas)}
+.stempel.hadiah{border:2px dashed var(--merah);background:rgba(255,100,100,.08);color:#ffb3b3}
+.stempel.hadiah.siap{border-style:solid;border-color:var(--emas);background:rgba(255,196,107,.2);color:var(--emas)}
+
+/* tiket & reward */
+.tiket{border:1px solid var(--garis-lembut);border-radius:16px;padding:1rem 1.1rem;background:rgba(255,255,255,.03)}
+.tiket+.tiket{margin-top:.8rem}
+.rw-kartu{height:100%;display:flex;flex-direction:column;background:linear-gradient(180deg,#16281f,#101a15);border:1px solid rgba(123,224,164,.22);border-radius:20px;padding:1.1rem}
+.rw-kartu .poin{color:var(--emas);font-weight:800;font-size:1.4rem}
+.rw-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:.15rem .55rem;border-radius:7px;background:#1d4a33;color:var(--hijau)}
+.kurang{font-size:.72rem;font-weight:700;padding:.2rem .5rem;border-radius:8px;background:#4a1d1d;color:var(--merah)}
+.voucher-tiket{border:1px dashed var(--emas);border-radius:14px;padding:.8rem 1rem;background:rgba(255,196,107,.06)}
+.voucher-tiket code{color:var(--emas);font-size:1.05rem;font-weight:800}
+.member .table{--bs-table-bg:transparent;--bs-table-color:var(--teks);--bs-table-border-color:var(--garis-lembut);--bs-table-hover-bg:rgba(255,255,255,.04);--bs-table-hover-color:var(--teks)}
+.member .table thead th{color:var(--redup);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* login/daftar */
+.auth-wrap{min-height:100vh;display:grid;place-items:center;padding:1.5rem}
+.auth-kartu{width:100%;max-width:430px}
+.auth-kartu .logo{width:76px;height:76px;border-radius:20px;border:1px solid var(--garis)}
+
+@media (max-width:991.98px){.mnav{order:3;width:100%;margin:0}.mtools{margin-left:auto}}
+@media (max-width:575.98px){.mjudul{font-size:1.3rem}.stempel-grid{gap:.4rem}.stempel{font-size:.6rem}.stempel i{font-size:1.2rem}.poin-pill small{display:none}.akun-btn .nama{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
