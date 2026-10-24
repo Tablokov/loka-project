@@ -5,8 +5,8 @@ $menu = [
   ['transaksi/index.php','bi-receipt','Transaksi',true],
   ['segmentasi/index.php','bi-diagram-3','Segmentasi',true],
   ['komplain/index.php','bi-chat-left-text','Komplain',true],
-  ['loyalty/poin.php','bi-gift','Loyalty',false],
-  ['kampanye/index.php','bi-megaphone','Kampanye',false],
+  ['loyalty/poin.php','bi-gift','Loyalty',true],
+  ['kampanye/index.php','bi-megaphone','Kampanye',true],
 ];
 $sekarang = $_SERVER['REQUEST_URI'];
 ?>
