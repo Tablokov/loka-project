@@ -3,7 +3,7 @@ require_once __DIR__ . '/../includes/member_fungsi.php';
 $m = wajib_member($pdo);
 $kategoriList = ['Produk' => 'Kualitas produk (rasa, takaran, suhu)', 'Pelayanan' => 'Pelayanan & kecepatan', 'Kebersihan' => 'Kebersihan kedai', 'Lainnya' => 'Lainnya (poin, voucher, dll.)'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    cek_csrf();
+    mem_cek_csrf();
     $kat = $_POST['kategori'] ?? ''; $pri = $_POST['prioritas'] ?? 'Sedang';
     $des = trim($_POST['deskripsi'] ?? ''); $tid = (int)($_POST['transaksi_id'] ?? 0);
     $hariIni = $pdo->prepare('SELECT COUNT(*) FROM komplain WHERE pelanggan_id = ? AND tanggal = CURDATE()'); $hariIni->execute([$m['id']]);

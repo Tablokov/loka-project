@@ -5,7 +5,7 @@ $judul = 'Daftar Member';
 $error = '';
 $in = ['nama'=>'','no_hp'=>'','email'=>'','tgl_lahir'=>'','alamat'=>''];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    cek_csrf();
+    mem_cek_csrf();
     foreach ($in as $k => $_) $in[$k] = trim($_POST[$k] ?? '');
     $hp = mem_hp($in['no_hp']); $pin = (string)($_POST['pin'] ?? ''); $pin2 = (string)($_POST['pin2'] ?? '');
     $lahirOk = $in['tgl_lahir'] !== '' && ($d = DateTime::createFromFormat('Y-m-d', $in['tgl_lahir'])) && $d->format('Y-m-d') === $in['tgl_lahir'] && $in['tgl_lahir'] <= date('Y-m-d');
@@ -63,6 +63,6 @@ require __DIR__ . '/_auth_head.php';
     </div>
     <button class="mbtn w-100 mt-4">Daftar &amp; masuk</button>
   </form>
-  <p class="text-center small mt-4 mb-0">Sudah punya akun? <a href="login.php">Masuk</a></p>
+  <p class="text-center small mt-4 mb-0">Sudah punya akun? <a href="<?= url('auth/login.php?tab=pelanggan') ?>">Masuk</a></p>
 </div></div>
 </body></html>

@@ -3,7 +3,7 @@ require_once __DIR__ . '/../includes/member_fungsi.php';
 $m = wajib_member($pdo);
 $menuPref = ['Kopi Susu Loka','Kopi Loka Creamy','Salted Caramel','Butterscotch','Triple Peach','Cold Apple','Cold Brew','Cold Stone','Chocolate Loka','Cotton Candy','Creamy Milk','Matcha'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    cek_csrf();
+    mem_cek_csrf();
     $nama = trim($_POST['nama'] ?? ''); $hp = mem_hp($_POST['no_hp'] ?? ''); $email = trim($_POST['email'] ?? '');
     $lahir = trim($_POST['tgl_lahir'] ?? ''); $alamat = trim($_POST['alamat'] ?? ''); $pref = $_POST['preferensi'] ?? '';
     $pinLama = (string)($_POST['pin_lama'] ?? ''); $pinBaru = (string)($_POST['pin_baru'] ?? '');

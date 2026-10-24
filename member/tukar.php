@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/member_fungsi.php';
 $m = wajib_member($pdo);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    cek_csrf();
+    mem_cek_csrf();
     $rid = (int)($_POST['reward_id'] ?? 0);
     $pdo->beginTransaction();
     try {
