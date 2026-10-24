@@ -2,9 +2,9 @@
 $menu = [
   ['dashboard.php','bi-speedometer2','Dashboard',true],
   ['pelanggan/index.php','bi-people','Pelanggan',true],
-  ['transaksi/index.php','bi-receipt','Transaksi',false],
-  ['segmentasi/index.php','bi-diagram-3','Segmentasi',false],
-  ['komplain/index.php','bi-chat-left-text','Komplain',false],
+  ['transaksi/index.php','bi-receipt','Transaksi',true],
+  ['segmentasi/index.php','bi-diagram-3','Segmentasi',true],
+  ['komplain/index.php','bi-chat-left-text','Komplain',true],
   ['loyalty/poin.php','bi-gift','Loyalty',false],
   ['kampanye/index.php','bi-megaphone','Kampanye',false],
 ];
