@@ -12,6 +12,7 @@ $penuh = $n > 0 && $isi === 0;                                  // siklus baru s
 if ($penuh) { $isi = STEMPEL_PENUH - 1; $siklus--; }
 $sisa = STEMPEL_PENUH - ($penuh ? STEMPEL_PENUH : $isi);
 $tr = $pdo->prepare('SELECT * FROM transaksi WHERE pelanggan_id = ? ORDER BY tanggal DESC, id DESC LIMIT 100'); $tr->execute([$m['id']]); $trx = $tr->fetchAll();
+$stp = stempel_status($pdo, $m['id']);
 $mt = $pdo->prepare('SELECT * FROM poin_pelanggan WHERE pelanggan_id = ? ORDER BY tanggal DESC, id DESC LIMIT 100'); $mt->execute([$m['id']]); $mut = $mt->fetchAll();
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
@@ -19,6 +20,10 @@ $mt = $pdo->prepare('SELECT * FROM poin_pelanggan WHERE pelanggan_id = ? ORDER B
   <div class="d-flex gap-2"><div class="mstat"><div class="lbl">Transaksi</div><div class="val"><?= $n ?></div></div><div class="mstat emas"><div class="lbl">Total belanja</div><div class="val fs-4"><?= rupiah($ring['tot']) ?></div></div></div>
 </div>
 
+<?php if ($stp['tersedia'] > 0): ?>
+<div class="alert alert-warning d-flex align-items-center gap-2" role="status"><i class="bi bi-gift-fill fs-4"></i>
+  <div><strong>Kamu punya <?= $stp['tersedia'] ?> hadiah stempel siap diklaim!</strong> Tunjukkan halaman ini ke kasir untuk mengambil <?= e(STEMPEL_HADIAH) ?>.</div></div>
+<?php endif; ?>
 <div class="mk mb-3" style="border-color:rgba(255,196,107,.5)">
   <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
     <div><span class="mbadge" style="background:#7a1f2b;color:#ffd1d6">SIKLUS <?= $siklus ?> &bull; STEMPEL KUNJUNGAN</span>
@@ -33,7 +38,7 @@ $mt = $pdo->prepare('SELECT * FROM poin_pelanggan WHERE pelanggan_id = ? ORDER B
     <?php endfor; ?>
     <div class="stempel hadiah <?= $penuh ? 'siap' : '' ?>"><i class="bi bi-gift-fill"></i>GRATIS 1 KOPI</div>
   </div>
-  <p class="small text-redup mt-3 mb-0">Stempel dihitung otomatis dari transaksi yang dicatat kasir. Klaim hadiah stempel dilakukan langsung di kasir.</p>
+  <p class="small text-redup mt-3 mb-0">Stempel dihitung otomatis dari transaksi yang dicatat kasir. Hadiah yang sudah diambil: <strong><?= $stp['diklaim'] ?></strong> &middot; klaim hadiah dilakukan langsung di kasir.</p>
 </div>
 
 <div class="mk">

@@ -1,35 +1,33 @@
 <?php
 $menu = [
-  ['dashboard.php','bi-speedometer2','Dashboard',true],
-  ['pelanggan/index.php','bi-people','Pelanggan',true],
-  ['transaksi/index.php','bi-receipt','Transaksi',true],
-  ['segmentasi/index.php','bi-diagram-3','Segmentasi',true],
-  ['komplain/index.php','bi-chat-left-text','Komplain',true],
-  ['loyalty/poin.php','bi-gift','Loyalty',true],
-  ['kampanye/index.php','bi-megaphone','Kampanye',true],
+  ['dashboard.php','bi-speedometer2','Dashboard'],
+  ['pelanggan/index.php','bi-people','Pelanggan'],
+  ['transaksi/index.php','bi-receipt','Transaksi'],
+  ['segmentasi/index.php','bi-diagram-3','Segmentasi'],
+  ['komplain/index.php','bi-chat-left-text','Komplain'],
+  ['loyalty/poin.php','bi-gift','Loyalty'],
+  ['kampanye/index.php','bi-megaphone','Kampanye'],
 ];
+if (($_SESSION['user']['role'] ?? '') === 'admin') $menu[] = ['pengguna/index.php','bi-person-gear','Pengguna'];
 $sekarang = $_SERVER['REQUEST_URI'];
 ?>
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar" id="sidebar" aria-label="Menu utama">
   <a class="brand" href="<?= url('dashboard.php') ?>">
     <img src="<?= url('assets/img/logo-loka.png') ?>" alt="Logo Kopi LOKA">
+    <span>Kopi LOKA<small>CRM Jambi</small></span>
   </a>
   <ul class="nav flex-column">
-  <?php foreach ($menu as [$href,$ikon,$label,$aktif]):
+  <?php foreach ($menu as [$href,$ikon,$label]):
       $folder = dirname($href) === '.' ? $href : dirname($href) . '/';
       $on = strpos($sekarang, $folder) !== false; ?>
     <li class="nav-item">
-      <?php if ($aktif): ?>
-        <a class="nav-link <?= $on ? 'active' : '' ?>" href="<?= url($href) ?>"><i class="bi <?= $ikon ?>"></i><?= $label ?></a>
-      <?php else: ?>
-        <span class="nav-link disabled" title="Segera hadir"><i class="bi <?= $ikon ?>"></i><?= $label ?></span>
-      <?php endif; ?>
+      <a class="nav-link <?= $on ? 'active' : '' ?>" href="<?= url($href) ?>" <?= $on ? 'aria-current="page"' : '' ?>><i class="bi <?= $ikon ?>" aria-hidden="true"></i><?= $label ?></a>
     </li>
   <?php endforeach; ?>
   </ul>
   <div class="user-box">
-    <div class="small"><?= e($_SESSION['user']['nama']) ?></div>
-    <div class="small opacity-75"><?= e($_SESSION['user']['role']) ?></div>
-    <a class="btn btn-sm btn-light mt-2 w-100" href="<?= url('auth/logout.php') ?>">Keluar</a>
+    <div class="small fw-bold"><?= e($_SESSION['user']['nama']) ?></div>
+    <div class="small opacity-75 mb-2"><?= e($_SESSION['user']['role']) ?></div>
+    <a class="btn btn-sm btn-light w-100" href="<?= url('auth/logout.php') ?>"><i class="bi bi-box-arrow-right me-1"></i>Keluar</a>
   </div>
 </nav>

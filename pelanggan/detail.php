@@ -1,6 +1,7 @@
 <?php
 $judul = 'Detail pelanggan';
 require __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/member_fungsi.php';
 $id = (int)($_GET['id'] ?? 0);
 $st = $pdo->prepare('SELECT * FROM pelanggan WHERE id = ?'); $st->execute([$id]);
 $p = $st->fetch();
@@ -10,6 +11,8 @@ $poin = (int)$pdo->query("SELECT COALESCE(SUM(CASE jenis WHEN 'masuk' THEN jumla
 $kat = kategori_loyalitas($poin);
 $ringkas = $pdo->query("SELECT COUNT(*) n, COALESCE(SUM(total),0) tot, MAX(tanggal) terakhir FROM transaksi WHERE pelanggan_id = $id")->fetch();
 $trx = $pdo->query("SELECT * FROM transaksi WHERE pelanggan_id = $id ORDER BY tanggal DESC, id DESC")->fetchAll();
+$punyaAkun = (bool)$pdo->query("SELECT COUNT(*) FROM akun_pelanggan WHERE pelanggan_id = $id")->fetchColumn();
+$stp = stempel_status($pdo, $id);
 ?>
 <div class="row g-3">
   <div class="col-lg-4"><div class="kartu">
@@ -27,6 +30,24 @@ $trx = $pdo->query("SELECT * FROM transaksi WHERE pelanggan_id = $id ORDER BY ta
     </dl>
     <a class="btn btn-sm btn-outline-loka" href="edit.php?id=<?= $id ?>">Edit data</a>
     <a class="btn btn-sm btn-outline-secondary" href="index.php">Kembali</a>
+  </div>
+  <div class="kartu mt-3">
+    <h3 class="h6 mb-2"><i class="bi bi-person-badge me-1"></i>Akun member</h3>
+    <p class="small mb-2"><?= $punyaAkun ? '<span class="badge text-bg-success">Sudah aktif</span> Pelanggan bisa masuk ke portal member.' : '<span class="badge text-bg-secondary">Belum aktif</span> Pelanggan belum punya akun portal.' ?></p>
+    <form method="post" action="reset_pin.php" onsubmit="return confirm('<?= $punyaAkun ? 'Reset PIN' : 'Buat akun member' ?> untuk <?= e(addslashes($p['nama'])) ?>? PIN sementara akan ditampilkan sekali.')">
+      <input type="hidden" name="csrf" value="<?= csrf() ?>"><input type="hidden" name="id" value="<?= $id ?>">
+      <button class="btn btn-sm btn-outline-loka"><i class="bi bi-key me-1"></i><?= $punyaAkun ? 'Reset PIN' : 'Buat akun &amp; PIN' ?></button>
+    </form>
+  </div>
+  <div class="kartu mt-3">
+    <h3 class="h6 mb-2"><i class="bi bi-cup-hot me-1"></i>Stempel loyalitas</h3>
+    <p class="small mb-1"><?= $stp['n'] ?> transaksi &middot; <?= $stp['selesai'] ?> siklus penuh &middot; <?= $stp['diklaim'] ?> sudah diklaim</p>
+    <?php if ($stp['tersedia'] > 0): ?>
+      <p class="small mb-2"><span class="badge text-bg-warning"><?= $stp['tersedia'] ?> hadiah siap diklaim</span> <?= e(STEMPEL_HADIAH) ?></p>
+      <form method="post" action="klaim_stempel.php" onsubmit="return confirm('Catat klaim hadiah stempel untuk <?= e(addslashes($p['nama'])) ?>?')">
+        <input type="hidden" name="csrf" value="<?= csrf() ?>"><input type="hidden" name="id" value="<?= $id ?>">
+        <button class="btn btn-sm btn-loka">Catat klaim stempel</button></form>
+    <?php else: ?><p class="small text-muted mb-0">Belum ada hadiah stempel yang siap diklaim.</p><?php endif; ?>
   </div></div>
   <div class="col-lg-8">
     <div class="row g-3 mb-3">

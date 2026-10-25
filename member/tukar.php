@@ -85,8 +85,8 @@ $hq->execute([$m['id']]); $hist = $hq->fetchAll();
 
 <section data-panel="riwayat" hidden><div class="mk">
   <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h5 mb-0"><i class="bi bi-clock-history text-warning me-2"></i>Riwayat Penukaran Poin Saya</h2><span class="mbadge"><?= count($hist) ?> penukaran</span></div>
-  <?php if ($hist): ?><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Kode klaim</th><th>Tanggal</th><th>Reward</th><th class="text-end">Poin</th></tr></thead><tbody>
-    <?php foreach ($hist as $h): ?><tr><td><code class="text-warning">RW-<?= str_pad($h['id'], 5, '0', STR_PAD_LEFT) ?></code></td><td><?= tgl($h['tanggal']) ?></td><td><?= e($h['nama']) ?></td><td class="text-end">-<?= $h['poin_dibutuhkan'] ?></td></tr><?php endforeach; ?>
+  <?php if ($hist): ?><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Kode klaim</th><th>Tanggal</th><th>Reward</th><th class="text-end">Poin</th><th>Status</th></tr></thead><tbody>
+    <?php foreach ($hist as $h): $ambil = $h['status'] !== 'diklaim'; ?><tr><td><code class="text-warning">RW-<?= str_pad($h['id'], 5, '0', STR_PAD_LEFT) ?></code></td><td><?= tgl($h['tanggal']) ?></td><td><?= e($h['nama']) ?></td><td class="text-end">-<?= $h['poin_dibutuhkan'] ?></td><td><span class="mbadge <?= $ambil ? 'selesai' : 'baru' ?>"><?= $ambil ? 'Sudah diambil' : 'Tunjukkan ke kasir' ?></span></td></tr><?php endforeach; ?>
   </tbody></table></div>
   <?php else: ?><div class="mkosong">Kamu belum pernah menukarkan poin. Kumpulkan poin dari setiap pesanan kopimu!</div><?php endif; ?>
 </div></section>

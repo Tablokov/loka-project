@@ -11,6 +11,7 @@ $sql .= ' ORDER BY t.tanggal DESC, t.id DESC LIMIT 300';
 $st = $pdo->prepare($sql); $st->execute($par);
 $data = $st->fetchAll();
 $jumlah = array_sum(array_column($data, 'total'));
+$admin = ($_SESSION['user']['role'] ?? '') === 'admin';
 ?>
 <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
   <form class="row g-2" method="get">
@@ -22,15 +23,17 @@ $jumlah = array_sum(array_column($data, 'total'));
   <a class="btn btn-loka" href="tambah.php"><i class="bi bi-plus-lg"></i> Catat transaksi</a>
 </div>
 <div class="kartu p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0">
-  <thead><tr><th>Tanggal</th><th>Pelanggan</th><th class="text-end">Total</th><th class="text-end">Poin</th></tr></thead>
+  <thead><tr><th>Tanggal</th><th>Pelanggan</th><th class="text-end">Total</th><th class="text-end">Poin</th><?php if ($admin): ?><th></th><?php endif; ?></tr></thead>
   <tbody>
   <?php foreach ($data as $t): ?>
     <tr><td><?= tgl($t['tanggal']) ?></td>
       <td><a href="<?= url('pelanggan/detail.php?id=' . $t['pelanggan_id']) ?>"><?= e($t['nama']) ?></a> <span class="text-muted small"><?= e($t['kode']) ?></span></td>
-      <td class="text-end"><?= rupiah($t['total']) ?></td><td class="text-end">+<?= $t['poin_didapat'] ?></td></tr>
+      <td class="text-end"><?= rupiah($t['total']) ?></td><td class="text-end">+<?= $t['poin_didapat'] ?></td>
+      <?php if ($admin): ?><td class="text-nowrap text-end"><a class="btn btn-sm btn-outline-secondary" href="edit.php?id=<?= $t['id'] ?>" aria-label="Edit transaksi <?= $t['id'] ?>"><i class="bi bi-pencil"></i></a>
+        <form method="post" action="hapus.php" class="d-inline" onsubmit="return confirm('Hapus transaksi ini? Poinnya ikut dibatalkan.')"><input type="hidden" name="csrf" value="<?= csrf() ?>"><input type="hidden" name="id" value="<?= $t['id'] ?>"><button class="btn btn-sm btn-outline-danger" aria-label="Hapus transaksi <?= $t['id'] ?>"><i class="bi bi-trash"></i></button></form></td><?php endif; ?></tr>
   <?php endforeach; ?>
-  <?php if (!$data): ?><tr><td colspan="4" class="text-center text-muted py-4">Tidak ada transaksi pada rentang ini.</td></tr><?php endif; ?>
+  <?php if (!$data): ?><tr><td colspan="5" class="text-center text-muted py-4">Tidak ada transaksi pada rentang ini.</td></tr><?php endif; ?>
   </tbody>
-  <?php if ($data): ?><tfoot><tr class="fw-semibold"><td colspan="2"><?= count($data) ?> transaksi</td><td class="text-end"><?= rupiah($jumlah) ?></td><td></td></tr></tfoot><?php endif; ?>
+  <?php if ($data): ?><tfoot><tr class="fw-semibold"><td colspan="2"><?= count($data) ?> transaksi</td><td class="text-end"><?= rupiah($jumlah) ?></td><td></td><?php if ($admin): ?><td></td><?php endif; ?></tr></tfoot><?php endif; ?>
 </table></div></div>
 <?php require __DIR__ . '/../includes/footer.php';

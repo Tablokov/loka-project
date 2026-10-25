@@ -14,13 +14,23 @@ $rows = $pdo->query("SELECT p.id, COALESCE(SUM(CASE pp.jenis WHEN 'masuk' THEN p
 $loyal = ['Bronze'=>0,'Silver'=>0,'Gold'=>0];
 foreach ($rows as $r) $loyal[kategori_loyalitas($r['poin'])]++;
 
+// Sebaran segmen RFM (hasil dari menu Segmentasi > Hitung ulang RFM)
+$segmen = ['High'=>0,'Medium'=>0,'Low'=>0];
+foreach ($pdo->query('SELECT customer_value v, COUNT(*) n FROM segmentasi_pelanggan GROUP BY customer_value') as $r) $segmen[$r['v']] = (int)$r['n'];
+$adaSegmen = array_sum($segmen) > 0;
+$tglHitung = $pdo->query('SELECT MAX(tgl_hitung) FROM segmentasi_pelanggan')->fetchColumn();
+
+// Pelanggan Low Value yang perlu diaktifkan kembali
+$perluAktif = $pdo->query("SELECT p.id, p.nama, p.kode, DATEDIFF(CURDATE(), MAX(t.tanggal)) hari
+    FROM segmentasi_pelanggan s JOIN pelanggan p ON p.id = s.pelanggan_id LEFT JOIN transaksi t ON t.pelanggan_id = p.id
+    WHERE s.customer_value = 'Low' GROUP BY p.id, p.nama, p.kode ORDER BY MAX(t.tanggal) IS NULL DESC, MAX(t.tanggal) ASC LIMIT 5")->fetchAll();
+
 // Transaksi 14 hari terakhir
 $hari = [];
 for ($i = 13; $i >= 0; $i--) $hari[date('Y-m-d', strtotime("-$i day"))] = 0;
 $st = $pdo->query('SELECT tanggal, COUNT(*) n FROM transaksi WHERE tanggal >= DATE_SUB(CURDATE(), INTERVAL 13 DAY) GROUP BY tanggal');
 foreach ($st as $r) $hari[$r['tanggal']] = (int)$r['n'];
 
-// Pelanggan terbaru
 $terbaru = $pdo->query('SELECT kode, nama, tgl_daftar, preferensi FROM pelanggan ORDER BY tgl_daftar DESC, id DESC LIMIT 5')->fetchAll();
 ?>
 <div class="row g-3 mb-3">
@@ -29,17 +39,44 @@ $terbaru = $pdo->query('SELECT kode, nama, tgl_daftar, preferensi FROM pelanggan
   <div class="col-6 col-xl-3"><div class="kartu stat"><div class="text-muted">Komplain terbuka</div><div class="angka"><?= $komplain_buka ?></div></div></div>
   <div class="col-6 col-xl-3"><div class="kartu stat"><div class="text-muted">Poin beredar</div><div class="angka"><?= number_format($poin_beredar,0,',','.') ?></div></div></div>
 </div>
-<div class="row g-3">
-  <div class="col-lg-7"><div class="kartu">
+<div class="row g-3 mb-3">
+  <div class="col-lg-6"><div class="kartu h-100">
     <h2 class="h6">Jumlah transaksi per hari (14 hari terakhir)</h2>
-    <canvas id="grafikTransaksi" height="130"></canvas>
+    <canvas id="grafikTransaksi" height="150"></canvas>
     <div class="small text-muted mt-2">Omzet bulan ini: <strong><?= rupiah($omzet_bulan) ?></strong></div>
   </div></div>
-  <div class="col-lg-5"><div class="kartu">
-    <h2 class="h6">Kategori loyalitas pelanggan</h2>
-    <canvas id="grafikLoyalitas" height="200"></canvas>
+  <div class="col-md-6 col-lg-3"><div class="kartu h-100">
+    <h2 class="h6">Segmen pelanggan (RFM)</h2>
+    <?php if ($adaSegmen): ?>
+      <canvas id="grafikSegmen" height="220"></canvas>
+      <div class="small text-muted mt-2">Dihitung <?= tgl($tglHitung) ?></div>
+    <?php else: ?>
+      <p class="text-muted small mb-2">Segmentasi belum dihitung.</p>
+      <a class="btn btn-sm btn-outline-loka" href="<?= url('segmentasi/index.php') ?>">Buka Segmentasi</a>
+    <?php endif; ?>
   </div></div>
-  <div class="col-12"><div class="kartu">
+  <div class="col-md-6 col-lg-3"><div class="kartu h-100">
+    <h2 class="h6">Kategori loyalitas</h2>
+    <canvas id="grafikLoyalitas" height="220"></canvas>
+  </div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-6"><div class="kartu h-100">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="h6 mb-0">Perlu diaktifkan kembali (Low Value)</h2>
+      <a class="btn btn-sm btn-outline-loka" href="<?= url('segmentasi/index.php?nilai=Low') ?>">Lihat semua</a>
+    </div>
+    <?php if ($perluAktif): ?>
+    <div class="table-responsive"><table class="table table-sm align-middle mb-0">
+      <thead><tr><th>Pelanggan</th><th class="text-end">Terakhir transaksi</th></tr></thead>
+      <tbody><?php foreach ($perluAktif as $p): ?>
+        <tr><td><a href="<?= url('pelanggan/detail.php?id=' . $p['id']) ?>"><?= e($p['nama']) ?></a> <span class="text-muted small"><?= e($p['kode']) ?></span></td>
+            <td class="text-end"><?= $p['hari'] === null ? 'Belum pernah' : $p['hari'] . ' hari lalu' ?></td></tr>
+      <?php endforeach; ?></tbody>
+    </table></div>
+    <?php else: ?><p class="text-muted small mb-0"><?= $adaSegmen ? 'Tidak ada pelanggan Low Value saat ini.' : 'Hitung segmentasi RFM terlebih dahulu.' ?></p><?php endif; ?>
+  </div></div>
+  <div class="col-lg-6"><div class="kartu h-100">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h2 class="h6 mb-0">Pelanggan terbaru</h2>
       <a class="btn btn-sm btn-outline-loka" href="<?= url('pelanggan/index.php') ?>">Lihat semua</a>
@@ -55,8 +92,9 @@ $terbaru = $pdo->query('SELECT kode, nama, tgl_daftar, preferensi FROM pelanggan
 <?php
 $labelHari = json_encode(array_map(fn($d) => date('d/m', strtotime($d)), array_keys($hari)));
 $dataHari  = json_encode(array_values($hari));
-$labelL = json_encode(array_keys($loyal));
-$dataL  = json_encode(array_values($loyal));
+$labelL = json_encode(array_keys($loyal)); $dataL = json_encode(array_values($loyal));
+$labelS = json_encode(['High Value','Medium Value','Low Value']); $dataS = json_encode(array_values($segmen));
+$grafikSegmen = $adaSegmen ? "new Chart(document.getElementById('grafikSegmen'), { type: 'doughnut', data: { labels: $labelS, datasets: [{ data: $dataS, backgroundColor: ['#FF5A0A', '#FFB27A', '#C9BBAF'] }] }, options: { plugins: { legend: { position: 'bottom' } } } });" : '';
 $skrip_tambahan = <<<JS
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
@@ -70,6 +108,7 @@ new Chart(document.getElementById('grafikLoyalitas'), {
   data: { labels: $labelL, datasets: [{ data: $dataL, backgroundColor: ['#B87333', '#8A9199', '#D9A400'] }] },
   options: { plugins: { legend: { position: 'bottom' } } }
 });
+$grafikSegmen
 </script>
 JS;
 require __DIR__ . '/includes/footer.php';
